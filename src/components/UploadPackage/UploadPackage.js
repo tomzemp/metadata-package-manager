@@ -17,14 +17,14 @@ async function parseJsonFile(file) {
     });
 }
 
-export function UploadPackage({ goToNextStep, onUpload }) {
+export function UploadPackage({ goToBeginning, goToNextStep, onUpload }) {
     const [file, setFile] = React.useState();
 
     const onChange = async (_, event) => {
         const [file] = event.target.files;
         setFile(file);
         const parsedPackage = await parseJsonFile(file);
-        onUpload({ parsedPackage });
+        onUpload(parsedPackage);
         goToNextStep();
     };
 
@@ -41,7 +41,11 @@ export function UploadPackage({ goToNextStep, onUpload }) {
                 {file ? (
                     <FileListItem
                         label={file.name}
-                        onRemove={() => setFile(null)}
+                        onRemove={() => {
+                            setFile(null);
+                            onUpload(null);
+                            goToBeginning();
+                        }}
                         removeText={i18n.t("Remove")}
                     />
                 ) : (
@@ -54,6 +58,7 @@ export function UploadPackage({ goToNextStep, onUpload }) {
     );
 }
 UploadPackage.propTypes = {
+    goToBeginning: PropTypes.func,
     goToNextStep: PropTypes.func,
     onUpload: PropTypes.func,
 };
