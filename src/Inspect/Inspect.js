@@ -3,8 +3,37 @@ import { Button } from "@dhis2/ui";
 import PropTypes from "prop-types";
 import React from "react";
 
+// Objects which have a `default` that should not be duplicate in an instance
+const DEFAULT_OBJECTS = [
+    "categories",
+    "categoryOptions",
+    "categoryCombos",
+    "categoryOptionCombos",
+];
+
 const query = {
+    categories: {
+        resource: "categories",
+        params: {
+            paging: false,
+            filter: "name:eq:default",
+        },
+    },
     categoryCombos: {
+        resource: "categoryOptionCombos",
+        params: {
+            paging: false,
+            filter: "name:eq:default",
+        },
+    },
+    categoryOptions: {
+        resource: "categoryOptions",
+        params: {
+            paging: false,
+            filter: "name:eq:default",
+        },
+    },
+    categoryOptionCombos: {
         resource: "categoryOptionCombos",
         params: {
             paging: false,
