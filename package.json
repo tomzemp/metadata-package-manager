@@ -20,6 +20,6 @@
   },
   "dependencies": {
     "@dhis2/app-runtime": "^3.6.1",
-    "@dhis2/ui": "^8.6.1"
+    "@dhis2/ui": "8.6.0"
   }
 }
