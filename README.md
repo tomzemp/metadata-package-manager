@@ -6,7 +6,7 @@ DHIS2 Hackathon 2022
 ### Start page:
 Shows a list of imported packages, and an option to import a new package.
 
-### The import process consists of 4 steps:
+### Import process:
 #### *Step 1: Upload package file for inspection and mapping*
 #### *Step 2: View inspect information and perform mappings*
 - Check package version against the backend version, based on file naming convention or comment/tag in the package itself. If the version does not match, the user will be warned of the mismatch.
