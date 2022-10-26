@@ -15,5 +15,5 @@ Shows a list of imported packages, and an option to import a new package.
 (More inspect and map options to come)
 #### *Step 3: Dry run of import*
 The import is attempted as a dry run, with the mappings and alternations from the previous step. The result of the dry run is presented to the user.
-####*Step 4: Import package*
+#### *Step 4: Import package*
 The package is imported and persisted on the server. The imported package is stored in the history visible in the front page.
