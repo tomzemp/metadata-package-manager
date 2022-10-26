@@ -8,10 +8,15 @@
     "build": "d2-app-scripts build",
     "start": "d2-app-scripts start",
     "test": "d2-app-scripts test",
-    "deploy": "d2-app-scripts deploy"
+    "deploy": "d2-app-scripts deploy",
+    "lint": "d2-style check",
+    "lint:staged": "lint --staged",
+    "format": "yarn d2-style apply",
+    "format:staged": "format --staged"
   },
   "devDependencies": {
-    "@dhis2/cli-app-scripts": "^10.1.3"
+    "@dhis2/cli-app-scripts": "^10.1.3",
+    "@dhis2/cli-style": "^10.4.2"
   },
   "dependencies": {
     "@dhis2/app-runtime": "^3.6.1"
