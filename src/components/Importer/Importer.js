@@ -1,8 +1,10 @@
+import {Button, IconCheckmarkCircle24, colors} from '@dhis2/ui'
 import React, { useState } from "react";
 import { DryRun } from "../DryRun/DryRun.js";
 import { Finalize } from "../Finalize/Finalize.js";
 import { Inspect } from "../Inspect/Inspect.js";
 import { UploadPackage } from "../UploadPackage/UploadPackage.js";
+import styles from "./Importer.module.css";
 
 export const Importer = () => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -14,11 +16,14 @@ export const Importer = () => {
         };
     };
 
+    const goToBeginning = () => setCurrentStep(0);
+
     const steps = [
         {
             name: "Choose a package",
             component: (
                 <UploadPackage
+                    goToBeginning={goToBeginning}
                     goToNextStep={incrementStep(0)}
                     onUpload={setMetadataPackage}
                 />
@@ -42,14 +47,31 @@ export const Importer = () => {
     return (
         <>
             <h1>Metadata package manager</h1>
-            {steps
-                .filter((el, ix) => ix <= currentStep)
-                .map(({ name, component, key }, index) => (
+            {steps.map(({ name, component, key }, index) => {
+                let stepStyle;
+                if (index === currentStep) {
+                    stepStyle = styles.inProgressStep;
+                }
+                if (index > currentStep) {
+                    stepStyle = styles.waitingStep;
+                }
+                if (index < currentStep) {
+                    stepStyle = styles.completedStep;
+                }
+                return (
                     <div key={key}>
-                        <h3>{`Step ${index + 1} ${name}`}</h3>
-                        {component}
+                        <div className={styles.headerWrapper}>
+                        {index < currentStep && <IconCheckmarkCircle24 color={colors.green600} />}
+                        
+                        <h3 className={stepStyle}>{`Step ${
+                            index + 1
+                        } ${name}`}</h3>
+                        </div>
+                        {index === currentStep && component}                        
                     </div>
-                ))}
+                );
+            })}
+            <Button destructive onClick={goToBeginning}>Start over</Button>
         </>
     );
 };

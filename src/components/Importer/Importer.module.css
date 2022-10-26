@@ -1,0 +1,20 @@
+.completedStep {
+    color: var(--colors-green600);
+}
+
+.inProgressStep {
+    color: var(--colors-grey800);
+}
+
+.waitingStep {
+    color: var(--colors-grey500);
+}
+
+.headerWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.headerWrapper * {
+    padding-left: 4px;
+}

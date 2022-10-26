@@ -1,11 +1,12 @@
 import { useDataQuery, useConfig } from "@dhis2/app-runtime";
-import { Button } from "@dhis2/ui";
+import { Button, CircularLoader, NoticeBox } from "@dhis2/ui";
 import PropTypes from "prop-types";
-import React from "react";
-import testPackage from "../lib/C19_CS_COMPLETE_1.0.2_DHIS2.37.json";
-import { inspectMetadata } from "../lib/inspectMetadata.js";
+import React, { useState } from "react";
+// import testPackage from "../../lib/C19_CS_COMPLETE_1.0.2_DHIS2.37.json";
+import { inspectMetadata } from "../../lib/inspectMetadata.js";
+import styles from "./Inspect.module.css";
 
-console.log(testPackage);
+// console.log(testPackage);
 
 const query = {
     categories: {
@@ -13,13 +14,15 @@ const query = {
         params: {
             paging: false,
             filter: "name:eq:default",
+            fields: "id",
         },
     },
     categoryCombos: {
-        resource: "categoryOptionCombos",
+        resource: "categoryCombos",
         params: {
             paging: false,
             filter: "name:eq:default",
+            fields: "id",
         },
     },
     categoryOptions: {
@@ -27,6 +30,7 @@ const query = {
         params: {
             paging: false,
             filter: "name:eq:default",
+            fields: "id",
         },
     },
     categoryOptionCombos: {
@@ -34,52 +38,98 @@ const query = {
         params: {
             paging: false,
             filter: "name:eq:default",
+            fields: "id",
         },
     },
     trackedEntityTypes: {
         resource: "trackedEntityTypes",
         params: {
             paging: false,
+            fields: "id,displayName",
         },
     },
     indicatorTypes: {
         resource: "indicatorTypes",
         params: {
             paging: false,
+            fields: "id,displayName",
         },
     },
 };
 
 export const Inspect = ({ goToNextStep, metadataPackage }) => {
-    const { data } = useDataQuery(query, {
-        onComplete: (data) => {
-            const results = inspectMetadata(testPackage, data);
-            // todo
+    const [results, setResults] = useState(null);
+    const [defaultsResolved, setDefaultsResolved] = useState(false);
+    const { serverVersion } = useConfig();
+    useDataQuery(query, {
+        onComplete: async (data) => {
+            // fake function to simulate processing time
+            await new Promise((e) => setTimeout(e, 300));
+            const checkedResults = inspectMetadata({
+                metadataPackage,
+                data,
+                serverVersion,
+            });
+            setResults(checkedResults);
         },
     });
-    const { systemInfo } = useConfig();
 
-    if (data && systemInfo) {
+    if (results && serverVersion) {
         return (
             <div>
-                <span>{JSON.stringify(metadataPackage)}</span>
+                {results.versionWarning && (
+                    <div className={styles.noticeBoxWrapper}>
+                        <NoticeBox
+                            title={results.versionWarning.title}
+                            warning={true}
+                        >
+                            {results.versionWarning.message}
+                        </NoticeBox>
+                    </div>
+                )}
+                {results.defaultWarning?.title && !defaultsResolved && (
+                    <div className={styles.noticeBoxWrapper}>
+                        <NoticeBox
+                            title={results.defaultWarning.title}
+                            error={true}
+                        >
+                            {results.defaultWarning.message}
+                        </NoticeBox>
+                        <div className={styles.buttonWrapper}>
+                            <Button
+                                primary
+                                onClick={() => {
+                                    setDefaultsResolved(true);
+                                }}
+                            >
+                                Use system defaults
+                            </Button>
+                        </div>
+                    </div>
+                )}
+                {defaultsResolved && (
+                    <div className={styles.noticeBoxWrapper}>
+                        <NoticeBox title="Defaults resolved">
+                            Package metadata defaults have been resolved to use
+                            system values.
+                        </NoticeBox>
+                    </div>
+                )}
                 <br />
-                <span>Wrong DHIS2 version</span>
-                <br />
-                <span>Default disaggregation is different </span>
-                <br />
-                <span>
+                {/* <span>
                     Do you want to map the tracked entity type to an existing
                     one?{" "}
                 </span>
                 <br />
                 <span>Map indicator types</span>
-                <br />
+                <br /> */}
+                <div className={styles.proceedButton}>
                 <Button onClick={goToNextStep}>Go to dry run</Button>
+                </div>
             </div>
         );
     }
-    return null;
+    return <CircularLoader />;
 };
 
 Inspect.propTypes = {
