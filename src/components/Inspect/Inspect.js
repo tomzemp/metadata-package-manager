@@ -2,14 +2,10 @@ import { useDataQuery, useConfig } from "@dhis2/app-runtime";
 import { Button } from "@dhis2/ui";
 import PropTypes from "prop-types";
 import React from "react";
+import testPackage from "../lib/C19_CS_COMPLETE_1.0.2_DHIS2.37.json";
+import { inspectMetadata } from "../lib/inspectMetadata.js";
 
-// Objects which have a `default` that should not be duplicate in an instance
-const DEFAULT_OBJECTS = [
-    "categories",
-    "categoryOptions",
-    "categoryCombos",
-    "categoryOptionCombos",
-];
+console.log(testPackage);
 
 const query = {
     categories: {
@@ -55,7 +51,12 @@ const query = {
 };
 
 export const Inspect = ({ goToNextStep, metadataPackage }) => {
-    const { data } = useDataQuery(query);
+    const { data } = useDataQuery(query, {
+        onComplete: (data) => {
+            const results = inspectMetadata(testPackage, data);
+            // todo
+        },
+    });
     const { systemInfo } = useConfig();
 
     if (data && systemInfo) {
