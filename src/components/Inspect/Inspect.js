@@ -54,13 +54,15 @@ const query = {
     },
 };
 
-export const Inspect = ({ goToNextStep }) => {
+export const Inspect = ({ goToNextStep, metadataPackage }) => {
     const { data } = useDataQuery(query);
     const { systemInfo } = useConfig();
 
     if (data && systemInfo) {
         return (
             <div>
+                <span>{JSON.stringify(metadataPackage)}</span>
+                <br />
                 <span>Wrong DHIS2 version</span>
                 <br />
                 <span>Default disaggregation is different </span>
@@ -81,4 +83,5 @@ export const Inspect = ({ goToNextStep }) => {
 
 Inspect.propTypes = {
     goToNextStep: PropTypes.func,
+    metadataPackage: PropTypes.object,
 };

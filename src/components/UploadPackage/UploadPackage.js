@@ -17,7 +17,7 @@ async function parseJsonFile(file) {
     });
 }
 
-export default function UploadPackage({ onUpload }) {
+export function UploadPackage({ goToNextStep, onUpload }) {
     const [file, setFile] = React.useState();
 
     const onChange = async (_, event) => {
@@ -25,6 +25,7 @@ export default function UploadPackage({ onUpload }) {
         setFile(file);
         const parsedPackage = await parseJsonFile(file);
         onUpload({ parsedPackage });
+        goToNextStep();
     };
 
     return (
@@ -53,5 +54,6 @@ export default function UploadPackage({ onUpload }) {
     );
 }
 UploadPackage.propTypes = {
+    goToNextStep: PropTypes.func,
     onUpload: PropTypes.func,
 };

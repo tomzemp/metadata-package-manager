@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { DryRun } from "../DryRun/DryRun.js";
-import { FileUpload } from "../FileUpload/FileUpload.js";
 import { Finalize } from "../Finalize/Finalize.js";
 import { Inspect } from "../Inspect/Inspect.js";
+import { UploadPackage } from "../UploadPackage/UploadPackage.js";
 
 export const Importer = () => {
     const [currentStep, setCurrentStep] = useState(0);
+    const [metadataPackage, setMetadataPackage] = useState(null);
 
     const incrementStep = (step) => {
         return () => {
@@ -16,12 +17,22 @@ export const Importer = () => {
     const steps = [
         {
             name: "Choose a package",
-            component: <FileUpload goToNextStep={incrementStep(0)} />,
+            component: (
+                <UploadPackage
+                    goToNextStep={incrementStep(0)}
+                    onUpload={setMetadataPackage}
+                />
+            ),
             key: "selection",
         },
         {
             name: "Inspect",
-            component: <Inspect goToNextStep={incrementStep(1)} />,
+            component: (
+                <Inspect
+                    goToNextStep={incrementStep(1)}
+                    metadataPackage={metadataPackage}
+                />
+            ),
             key: "inspection",
         },
         { name: "Dry run", component: <DryRun />, key: "dry_run" },
