@@ -5,26 +5,28 @@ import { Finalize } from "../Finalize/Finalize.js";
 import { Inspect } from "../Inspect/Inspect.js";
 
 export const Importer = () => {
-    const [currentStep, setCurrentStep] = useState(4);
+    const [currentStep, setCurrentStep] = useState(0);
 
     const incrementStep = (step) => {
         return () => {
-            setCurrentStep(step + 1)
-        }
-    }
+            setCurrentStep(step + 1);
+        };
+    };
 
     const steps = [
         {
             name: "Choose a package",
-            component: <FileUpload />,
+            component: <FileUpload goToNextStep={incrementStep(0)} />,
             key: "selection",
         },
-        { name: "Inspect", component: <Inspect goToNextStep={incrementStep(1)}/>, key: "inspection" },
+        {
+            name: "Inspect",
+            component: <Inspect goToNextStep={incrementStep(1)} />,
+            key: "inspection",
+        },
         { name: "Dry run", component: <DryRun />, key: "dry_run" },
         { name: "Finalize", component: <Finalize />, key: "finalization" },
     ];
-
-
 
     return (
         <>

@@ -1,12 +1,11 @@
 import { useDataQuery, useConfig } from "@dhis2/app-runtime";
-import {Button} from '@dhis2/ui'
-import PropTypes from 'prop-types'
+import { Button } from "@dhis2/ui";
+import PropTypes from "prop-types";
 import React from "react";
-
 
 const query = {
     categoryCombos: {
-        resource: "categoryCombos",
+        resource: "categoryOptionCombos",
         params: {
             paging: false,
             filter: "name:eq:default",
@@ -26,7 +25,7 @@ const query = {
     },
 };
 
-export const Inspect = ({goToNextStep}) => {
+export const Inspect = ({ goToNextStep }) => {
     const { data } = useDataQuery(query);
     const { systemInfo } = useConfig();
 
@@ -53,4 +52,4 @@ export const Inspect = ({goToNextStep}) => {
 
 Inspect.propTypes = {
     goToNextStep: PropTypes.func,
-}
+};
