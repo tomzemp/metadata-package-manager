@@ -19,6 +19,7 @@
     "@dhis2/cli-style": "^10.4.2"
   },
   "dependencies": {
-    "@dhis2/app-runtime": "^3.6.1"
+    "@dhis2/app-runtime": "^3.6.1",
+    "@dhis2/ui": "8.6.0"
   }
 }

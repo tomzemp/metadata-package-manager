@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./App.module.css";
 import { Importer } from "./Importer/Importer.js";
+import "./locales/index.js";
 
 const App = () => {
     return (
