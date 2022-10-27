@@ -1,7 +1,8 @@
 import { useDataMutation } from "@dhis2/app-runtime";
-import { Button } from "@dhis2/ui";
+import { Button, CircularLoader } from "@dhis2/ui";
 import PropTypes from "prop-types";
 import React from "react";
+import styles from "./DryRun.module.css";
 
 const mutation = {
     resource: "metadata",
@@ -14,28 +15,57 @@ const mutation = {
 };
 
 export const DryRun = ({ metadataPackage }) => {
-    const [mutate, { data, error }] = useDataMutation(mutation, {
+    const [mutate, { data, loading, error }] = useDataMutation(mutation, {
         variables: {
             metadata: metadataPackage,
         },
     });
 
+    if (error) {
+        const filteredErrors = error.details.response.typeReports.filter(
+            ({ objectReports }) => objectReports.length > 0
+        );
+        // const errorCount = filteredErrors.reduce((acc,typeReports)=>{
+        //     return acc+typeReports.objectReports.length||0}
+        // ,0)
+
+        const flatMessagesArray = filteredErrors.map((objectError) => {
+            const flattenedObjectReports = objectError.objectReports.reduce(
+                (flat, or) => {
+                    flat.push(or.errorReports[0].message);
+                    return flat;
+                },
+                []
+            );
+            const objectName = objectError?.klass?.split(".")?.pop();
+            return { objectName, errorMessages: flattenedObjectReports };
+        });
+
+        return flatMessagesArray.map((item) => {
+            return (
+                <div key={item.objectName}>
+                    <div>
+                        <span className={styles.errorTitle}>
+                            {item.objectName}
+                        </span>
+                    </div>
+                    {item.errorMessages.map((msg) => (
+                        <div key={msg}>
+                            <span className={styles.errorMessage}>{msg}</span>
+                        </div>
+                    ))}
+                </div>
+            );
+        });
+    }
+
+    if (loading) {
+        return <CircularLoader />;
+    }
     return (
-        <div>
-            <Button primary disabled={data || error} onClick={mutate}>
-                Start dry run
-            </Button>
-            {error && (
-                <>
-                    {/* {JSON.stringify(Object.keys(error))} */}
-                    {JSON.stringify(
-                        error.details.response.typeReports.filter(
-                            ({ objectReports }) => objectReports.length > 0
-                        )
-                    )}
-                </>
-            )}
-        </div>
+        <Button primary disabled={data || error} onClick={mutate}>
+            Start dry run
+        </Button>
     );
 };
 
