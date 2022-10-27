@@ -10,11 +10,20 @@
     color: var(--colors-grey500);
 }
 
+.stepHeaderWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.stepHeaderWrapper * {
+    padding-left: 4px;
+}
+
 .headerWrapper {
     display: flex;
     align-items: center;
 }
 
-.headerWrapper * {
-    padding-left: 4px;
+.headerWrapper :last-child {
+    margin-left: auto;
 }

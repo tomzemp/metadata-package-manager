@@ -17,8 +17,9 @@
 
 .moduleTitle {
     font-size: 18px;
-    line-height: 30px;
-    color: var(--colors-grey800)
+    line-height: 36px;
+    color: var(--colors-grey800);
+    font-weight: 500;
 }
 
 .moduleSubHeader {

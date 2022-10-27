@@ -50,7 +50,12 @@ export const Importer = () => {
 
     return (
         <>
-            <h1>Metadata package manager</h1>
+            <div className={styles.headerWrapper}>
+                <h1>Metadata package manager</h1>
+                <Button destructive onClick={goToBeginning}>
+                    Start over
+                </Button>
+            </div>
             {steps.map(({ name, component, key }, index) => {
                 let stepStyle;
                 if (index === currentStep) {
@@ -65,7 +70,7 @@ export const Importer = () => {
                 return (
                     <>
                         <div key={key}>
-                            <div className={styles.headerWrapper}>
+                            <div className={styles.stepHeaderWrapper}>
                                 {index < currentStep && (
                                     <IconCheckmarkCircle24
                                         color={colors.green500}
@@ -82,9 +87,6 @@ export const Importer = () => {
                     </>
                 );
             })}
-            <Button destructive onClick={goToBeginning}>
-                Start over
-            </Button>
         </>
     );
 };
