@@ -1,4 +1,4 @@
-import {Button, IconCheckmarkCircle24, colors} from '@dhis2/ui'
+import { Button, Divider, IconCheckmarkCircle24, colors } from "@dhis2/ui";
 import React, { useState } from "react";
 import { DryRun } from "../DryRun/DryRun.js";
 import { Finalize } from "../Finalize/Finalize.js";
@@ -40,7 +40,11 @@ export const Importer = () => {
             ),
             key: "inspection",
         },
-        { name: "Dry run", component: <DryRun />, key: "dry_run" },
+        {
+            name: "Dry run",
+            component: <DryRun metadataPackage={metadataPackage} />,
+            key: "dry_run",
+        },
         { name: "Finalize", component: <Finalize />, key: "finalization" },
     ];
 
@@ -59,19 +63,28 @@ export const Importer = () => {
                     stepStyle = styles.completedStep;
                 }
                 return (
-                    <div key={key}>
-                        <div className={styles.headerWrapper}>
-                        {index < currentStep && <IconCheckmarkCircle24 color={colors.green600} />}
-                        
-                        <h3 className={stepStyle}>{`Step ${
-                            index + 1
-                        } ${name}`}</h3>
+                    <>
+                        <div key={key}>
+                            <div className={styles.headerWrapper}>
+                                {index < currentStep && (
+                                    <IconCheckmarkCircle24
+                                        color={colors.green500}
+                                    />
+                                )}
+
+                                <h3 className={stepStyle}>{`Step ${
+                                    index + 1
+                                }. ${name}`}</h3>
+                            </div>
+                            {index === currentStep && component}
                         </div>
-                        {index === currentStep && component}                        
-                    </div>
+                        <Divider />
+                    </>
                 );
             })}
-            <Button destructive onClick={goToBeginning}>Start over</Button>
+            <Button destructive onClick={goToBeginning}>
+                Start over
+            </Button>
         </>
     );
 };

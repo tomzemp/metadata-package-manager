@@ -1,0 +1,19 @@
+.selector {
+    margin: 8px 0 0 16px;
+    width: 400px;
+}
+
+.tetBlock {
+    margin: 8px 0 0 16px;
+}
+
+.tetTitle {
+    color: var(--colors-grey800);
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.radioItem {
+    margin-top: 8px;
+}

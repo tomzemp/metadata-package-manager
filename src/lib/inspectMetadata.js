@@ -15,7 +15,6 @@ const checkDefaultObjects = (metadataPackage, targetSystemMetadata) => {
         const packageId = metadataPackage[objectType].find(
             ({ name }) => name === DEFAULT_NAME
         )?.id;
-        console.log(objectType, serverId, packageId);
         if (packageId && packageId !== serverId) {
             warnings.push({ serverId, packageId, objectType });
         }
@@ -30,7 +29,7 @@ const checkDefaultObjects = (metadataPackage, targetSystemMetadata) => {
                 .sort()
                 .join(
                     ", "
-                )} are different between this metadata package and your system. Importing inconsistent defaults will cause system problems. Please resolve by clicking Use system defaults below or modify the metadata package.`,
+                )} are different between this metadata package and your system. Importing inconsistent defaults will cause system problems. Please resolve by clicking Use system defaults below or modify the metadata package and click Start over.`,
         };
     }
     return {};
@@ -53,6 +52,29 @@ const checkVersionCompatibility = ({ metadataPackage, serverVersion }) => {
     };
 };
 
+const checkTrackedEntityTypes = ({ metadataPackage, targetSystemMetadata }) => {
+    const targetTrackedEntityTypes =
+        targetSystemMetadata.trackedEntityTypes.trackedEntityTypes;
+    const packageTrackedEntityTypes = metadataPackage.trackedEntityTypes;
+
+    if (
+        !(
+            targetTrackedEntityTypes.length > 0 &&
+            packageTrackedEntityTypes.length > 0
+        )
+    ) {
+        return {};
+    }
+
+    return {
+        title: "Potential duplicate tracked entity types",
+        message:
+            "Your system contains potential duplicate tracked entity types. Duplicate tracked entity types can cause problems in your system. It is recommended that you attempt to identify and map the metadata pacakage's tracked entity types to ones that exist in your system. If no matches find, import the tracked entity as new.",
+        targetTrackedEntityTypes,
+        packageTrackedEntityTypes,
+    };
+};
+
 export const inspectMetadata = ({
     metadataPackage,
     data: targetSystemMetadata,
@@ -62,14 +84,20 @@ export const inspectMetadata = ({
         metadataPackage,
         targetSystemMetadata
     );
-    console.log(defaultWarning);
+
     const versionWarning = checkVersionCompatibility({
         metadataPackage,
         serverVersion,
     });
 
+    const trackedEntityTypeWarning = checkTrackedEntityTypes({
+        metadataPackage,
+        targetSystemMetadata,
+    });
+
     return {
         versionWarning,
         defaultWarning,
+        trackedEntityTypeWarning,
     };
 };

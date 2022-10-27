@@ -5,6 +5,7 @@ import React, { useState } from "react";
 // import testPackage from "../../lib/C19_CS_COMPLETE_1.0.2_DHIS2.37.json";
 import { inspectMetadata } from "../../lib/inspectMetadata.js";
 import styles from "./Inspect.module.css";
+import { TrackedEntityTypeMapping } from "./TrackedEntityTypeMapping.js";
 
 // console.log(testPackage);
 
@@ -78,53 +79,98 @@ export const Inspect = ({ goToNextStep, metadataPackage }) => {
         return (
             <div>
                 {results.versionWarning && (
-                    <div className={styles.noticeBoxWrapper}>
-                        <NoticeBox
-                            title={results.versionWarning.title}
-                            warning={true}
-                        >
-                            {results.versionWarning.message}
-                        </NoticeBox>
-                    </div>
-                )}
-                {results.defaultWarning?.title && !defaultsResolved && (
-                    <div className={styles.noticeBoxWrapper}>
-                        <NoticeBox
-                            title={results.defaultWarning.title}
-                            error={true}
-                        >
-                            {results.defaultWarning.message}
-                        </NoticeBox>
-                        <div className={styles.buttonWrapper}>
-                            <Button
-                                primary
-                                onClick={() => {
-                                    setDefaultsResolved(true);
-                                }}
+                    <div className={styles.validationBlock}>
+                        <span className={styles.moduleTitle}>
+                            Version compatibility
+                        </span>
+                        <div className={styles.noticeBoxWrapper}>
+                            <NoticeBox
+                                title={results.versionWarning.title}
+                                warning={true}
                             >
-                                Use system defaults
-                            </Button>
+                                {results.versionWarning.message}
+                            </NoticeBox>
                         </div>
                     </div>
                 )}
-                {defaultsResolved && (
-                    <div className={styles.noticeBoxWrapper}>
-                        <NoticeBox title="Defaults resolved">
-                            Package metadata defaults have been resolved to use
-                            system values.
-                        </NoticeBox>
-                    </div>
-                )}
-                <br />
-                {/* <span>
-                    Do you want to map the tracked entity type to an existing
-                    one?{" "}
-                </span>
-                <br />
-                <span>Map indicator types</span>
-                <br /> */}
+
+                <div className={styles.validationBlock}>
+                    {results.defaultWarning?.title && (
+                        <>
+                            <span className={styles.moduleTitle}>
+                                Categories, category options, category combos,
+                                category option combos
+                            </span>
+                            {!defaultsResolved && (
+                                <div className={styles.noticeBoxWrapper}>
+                                    <NoticeBox
+                                        title={results.defaultWarning.title}
+                                        error={true}
+                                    >
+                                        {results.defaultWarning.message}
+                                    </NoticeBox>
+                                    <div className={styles.buttonWrapper}>
+                                        <Button
+                                            primary
+                                            onClick={() => {
+                                                setDefaultsResolved(true);
+                                            }}
+                                        >
+                                            Use system defaults
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                            {defaultsResolved && (
+                                <div className={styles.noticeBoxWrapper}>
+                                    <NoticeBox title="Defaults resolved">
+                                        Package metadata defaults have been
+                                        resolved to use system values.
+                                    </NoticeBox>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
+
+                <div className={styles.validationBlock}>
+                    {results.trackedEntityTypeWarning?.title && (
+                        <>
+                            <span className={styles.moduleTitle}>
+                                Tracked entity type
+                            </span>
+                            <div className={styles.noticeBoxWrapper}>
+                                <NoticeBox
+                                    title={
+                                        results.trackedEntityTypeWarning.title
+                                    }
+                                >
+                                    {results.trackedEntityTypeWarning?.message}
+                                </NoticeBox>
+                            </div>
+                            <div className={styles.moduleSubsection}>
+                                <span className={styles.moduleSubHeader}>
+                                    Package tracked entity types
+                                </span>
+                                {results.trackedEntityTypeWarning.packageTrackedEntityTypes.map(
+                                    (packageTET) => (
+                                        <TrackedEntityTypeMapping
+                                            key={packageTET.name}
+                                            packageTET={packageTET}
+                                            options={
+                                                results.trackedEntityTypeWarning
+                                                    .targetTrackedEntityTypes
+                                            }
+                                        />
+                                    )
+                                )}
+                            </div>
+                        </>
+                    )}
+                </div>
+
                 <div className={styles.proceedButton}>
-                <Button onClick={goToNextStep}>Go to dry run</Button>
+                    <Button onClick={goToNextStep}>Go to dry run</Button>
                 </div>
             </div>
         );

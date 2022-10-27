@@ -10,3 +10,23 @@
 .proceedButton {
     margin-top: 8px;
 }
+
+.validationBlock {
+    margin: 0 0 16px 16px;
+}
+
+.moduleTitle {
+    font-size: 18px;
+    line-height: 30px;
+    color: var(--colors-grey800)
+}
+
+.moduleSubHeader {
+    font-size: 16px;
+    line-height: 30px;
+    color: var(--colors-grey800)    
+}
+
+.moduleSubsection {
+    margin-left: 8px;
+}
