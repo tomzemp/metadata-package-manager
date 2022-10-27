@@ -68,8 +68,8 @@ export const Importer = () => {
                     stepStyle = styles.completedStep;
                 }
                 return (
-                    <>
-                        <div key={key}>
+                    <div key={key}>
+                        <div>
                             <div className={styles.stepHeaderWrapper}>
                                 {index < currentStep && (
                                     <IconCheckmarkCircle24
@@ -84,7 +84,7 @@ export const Importer = () => {
                             {index === currentStep && component}
                         </div>
                         <Divider />
-                    </>
+                    </div>
                 );
             })}
         </>
