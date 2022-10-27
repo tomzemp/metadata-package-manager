@@ -1,0 +1,16 @@
+.errorTitle {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--colors-red500);
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.errorMessage {
+    display: inline-block;
+    margin-top: 8px;
+    margin-left: 16px;
+    color: var(--colors-grey800);
+    font-size: 14px;
+    line-height: 20px;
+}
