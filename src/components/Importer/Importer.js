@@ -1,4 +1,4 @@
-import {Button, IconCheckmarkCircle24, colors} from '@dhis2/ui'
+import { Button, Divider, IconCheckmarkCircle24, colors } from "@dhis2/ui";
 import React, { useState } from "react";
 import { DryRun } from "../DryRun/DryRun.js";
 import { Finalize } from "../Finalize/Finalize.js";
@@ -40,13 +40,22 @@ export const Importer = () => {
             ),
             key: "inspection",
         },
-        { name: "Dry run", component: <DryRun />, key: "dry_run" },
+        {
+            name: "Dry run",
+            component: <DryRun metadataPackage={metadataPackage} />,
+            key: "dry_run",
+        },
         { name: "Finalize", component: <Finalize />, key: "finalization" },
     ];
 
     return (
         <>
-            <h1>Metadata package manager</h1>
+            <div className={styles.headerWrapper}>
+                <h1>Metadata package manager</h1>
+                <Button destructive onClick={goToBeginning}>
+                    Start over
+                </Button>
+            </div>
             {steps.map(({ name, component, key }, index) => {
                 let stepStyle;
                 if (index === currentStep) {
@@ -60,18 +69,24 @@ export const Importer = () => {
                 }
                 return (
                     <div key={key}>
-                        <div className={styles.headerWrapper}>
-                        {index < currentStep && <IconCheckmarkCircle24 color={colors.green600} />}
-                        
-                        <h3 className={stepStyle}>{`Step ${
-                            index + 1
-                        } ${name}`}</h3>
+                        <div>
+                            <div className={styles.stepHeaderWrapper}>
+                                {index < currentStep && (
+                                    <IconCheckmarkCircle24
+                                        color={colors.green500}
+                                    />
+                                )}
+
+                                <h3 className={stepStyle}>{`Step ${
+                                    index + 1
+                                }. ${name}`}</h3>
+                            </div>
+                            {index === currentStep && component}
                         </div>
-                        {index === currentStep && component}                        
+                        <Divider />
                     </div>
                 );
             })}
-            <Button destructive onClick={goToBeginning}>Start over</Button>
         </>
     );
 };
